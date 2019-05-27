@@ -1,11 +1,13 @@
 package com.example.retrofit;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.retrofit.APIInterface.APIInterface;
@@ -17,11 +19,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CustomAdapter.ItemClickListener {
 
 
-    private CustomAdapter adapter;
-    private RecyclerView recyclerView;
+    List<RetroPosts> postsList;
+    public CustomAdapter adapter;
+    public RecyclerView recyclerView;
     ProgressDialog progressDoalog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressDoalog = new ProgressDialog(MainActivity.this);
         progressDoalog.setMessage("Loading....");
+        progressDoalog.setCancelable(true);
         progressDoalog.show();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<List<RetroPosts>> listCall = apiInterface.getAllPosts();
@@ -50,8 +54,18 @@ public class MainActivity extends AppCompatActivity {
     private void generateDataList(List<RetroPosts> photoList) {
         recyclerView = findViewById(R.id.recycler);
         adapter = new CustomAdapter(photoList,this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this,2);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        adapter.setClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        final RetroPosts retroPosts = postsList.get(position);
+        Intent intent = new Intent(this,PostDetailsActivity.class);
+        intent.putExtra("body",postsList.get(position).getBody());
+        startActivity(intent);
+        Toast.makeText(this,"Item Clicked", Toast.LENGTH_SHORT).show();
     }
 }
