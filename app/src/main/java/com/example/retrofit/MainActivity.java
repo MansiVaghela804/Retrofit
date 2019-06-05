@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ite
         setContentView(R.layout.activity_main);
         progressDoalog = new ProgressDialog(MainActivity.this);
         progressDoalog.setMessage("Loading....");
-        progressDoalog.setCancelable(true);
+        progressDoalog.setCancelable(false);
         progressDoalog.show();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<List<RetroPosts>> listCall = apiInterface.getAllPosts();
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ite
             @Override
             public void onFailure(Call<List<RetroPosts>> call, Throwable t) {
                 progressDoalog.dismiss();
-                Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Something went wrong.Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
      }
@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ite
 
     @Override
     public void onClick(View view, int position) {
-        final RetroPosts retroPosts = postsList.get(position);
+//        RetroPosts retroPosts = postsList.get(position);
         Intent intent = new Intent(this,PostDetailsActivity.class);
-        intent.putExtra("body",postsList.get(position).getBody());
+//        intent.putExtra("body",retroPosts.getBody());
         startActivity(intent);
         Toast.makeText(this,"Item Clicked", Toast.LENGTH_SHORT).show();
     }

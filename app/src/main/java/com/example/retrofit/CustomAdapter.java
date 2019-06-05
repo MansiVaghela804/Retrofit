@@ -68,7 +68,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
         @Override
         public void onClick(View v) {
-            clickListener.onClick(v, getPosition());
+//            clickListener.onClick(v, getPosition());
+            if (clickListener != null) clickListener.onClick(v, getAdapterPosition());
         }
     }
 }
